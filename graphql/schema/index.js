@@ -10,6 +10,7 @@ module.exports = buildSchema(`
     }
 
     input UserInput {
+        _id: String!
         firstname: String!
         lastname: String!
         email: String!

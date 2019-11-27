@@ -1,4 +1,5 @@
 const User  = require('../../models/user');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
     createUser: async args => {
@@ -11,6 +12,7 @@ module.exports = {
             const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
             //Creating the user
             const user = new User({
+                _id: args.userInput._id,
                 firstname: args.userInput.firstname,
                 lastname: args.userInput.lastname, 
                 email: args.userInput.email,
