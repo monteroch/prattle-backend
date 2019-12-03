@@ -6,7 +6,6 @@ module.exports = buildSchema(`
         firstname: String!
         lastname: String!
         email: String!
-        password: String
     }
 
     input UserInput {
@@ -14,7 +13,6 @@ module.exports = buildSchema(`
         firstname: String!
         lastname: String!
         email: String!
-        password: String
     }
 
     type RootQuery {

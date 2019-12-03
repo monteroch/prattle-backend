@@ -9,20 +9,17 @@ module.exports = {
             if(existingUser){
                 throw new Error('User exist already');
             }
-            const hashedPassword = await bcrypt.hash(args.userInput.password, 12);
             //Creating the user
             const user = new User({
                 _id: args.userInput._id,
                 firstname: args.userInput.firstname,
                 lastname: args.userInput.lastname, 
-                email: args.userInput.email,
-                password: hashedPassword
+                email: args.userInput.email
             });
             //Saving the user into the database
             const result = await user.save();
             return {
                 ...result._doc,
-                password: null,
                 _id: result.id
             };
         }catch(error){
