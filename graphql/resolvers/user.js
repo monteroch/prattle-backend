@@ -35,5 +35,16 @@ module.exports = {
         }catch(error){
             throw error;
         }
+    },
+    loadProfile: async(userId) => {
+        try{    
+            console.log("Inside loadProfile");
+            console.log("userID: ", userId)
+            const user = await User.findById(userId.userId);
+            console.log("The user is: ", user);
+            return user;
+        }catch(error){
+            throw error;
+        }
     }
 };
