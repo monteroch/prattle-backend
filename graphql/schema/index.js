@@ -6,6 +6,9 @@ module.exports = buildSchema(`
         firstname: String!
         lastname: String!
         email: String!
+        contacts: [String]
+        requests: [String]
+        pendingRequests: [String]
     }
 
     input UserInput {

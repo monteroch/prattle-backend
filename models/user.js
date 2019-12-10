@@ -16,7 +16,10 @@ const userSchema = new Schema({
     email: {
         type: String,
         required: true
-    }
+    },
+    contacts:[String],
+    requests:[String],
+    pendingRequests:[String]
 });
 
 module.exports = mongoose.model('User', userSchema);

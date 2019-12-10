@@ -14,7 +14,10 @@ module.exports = {
                 _id: args.userInput._id,
                 firstname: args.userInput.firstname,
                 lastname: args.userInput.lastname, 
-                email: args.userInput.email
+                email: args.userInput.email,
+                contacts: [],
+                requests:[],
+                pendingRequests:[]
             });
             //Saving the user into the database
             const result = await user.save();
