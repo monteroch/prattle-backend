@@ -46,5 +46,23 @@ module.exports = {
         }catch(error){
             throw error;
         }
+    },
+    retrieveUsers: async(pattern) => {
+        console.log("The pattern is: ", pattern);
+        try{    
+            const users = await User.find(
+                {"firstname": {$regex: pattern.pattern, "$options": "i"}},
+            );
+            if(users.length > 0){
+                console.log("The result of users is: ", users);
+                return users.map( user => {
+                    return user
+                });
+            }else{
+                return {};
+            }
+        }catch(error){
+            throw error;
+        }
     }
 };

@@ -18,6 +18,7 @@ module.exports = buildSchema(`
     type RootQuery {
         users: [User!]!
         loadProfile(userId: String): User
+        retrieveUsers(pattern: String!): [User!]!
     }
 
     type RootMutation {
