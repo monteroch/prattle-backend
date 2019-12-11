@@ -12,13 +12,18 @@ module.exports = buildSchema(`
     }
 
     type Request{
+        requestId: String!
         sourceId: String!
+        sourceName: String!
         targetId: String!
+        targetName: String!
     }
 
     input RequestInput{
         sourceId: String!
+        sourceName: String!
         targetId: String!
+        targetName: String!
     }
 
     input UserInput {
@@ -26,6 +31,13 @@ module.exports = buildSchema(`
         firstname: String!
         lastname: String!
         email: String!
+    }
+
+    input HandleRequest{
+        value: Boolean!
+        requestId: String!
+        sourceId: String!
+        targetId: String!
     }
 
     type RootQuery {
@@ -37,6 +49,7 @@ module.exports = buildSchema(`
     type RootMutation {
         createUser(userInput: UserInput): User
         addContact(RequestInput: RequestInput): User
+        handleFriendshipRequest(HandleRequest: HandleRequest): User
     }
 
     schema {

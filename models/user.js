@@ -19,12 +19,18 @@ const userSchema = new Schema({
     },
     contacts:[String],
     requests:[{
+        requestId: String,
         sourceId: String,
-        targetId: String
+        sourceName: String,
+        targetId: String,
+        targetName: String
     }],
     pendingRequests:[{
+        requestId: String,
         sourceId: String,
-        targetId: String
+        sourceName: String,
+        targetId: String,
+        targetName: String
     }],
 });
 
