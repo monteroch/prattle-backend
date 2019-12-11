@@ -18,8 +18,14 @@ const userSchema = new Schema({
         required: true
     },
     contacts:[String],
-    requests:[String],
-    pendingRequests:[String]
+    requests:[{
+        sourceId: String,
+        targetId: String
+    }],
+    pendingRequests:[{
+        sourceId: String,
+        targetId: String
+    }],
 });
 
 module.exports = mongoose.model('User', userSchema);

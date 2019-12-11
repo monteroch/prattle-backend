@@ -7,8 +7,18 @@ module.exports = buildSchema(`
         lastname: String!
         email: String!
         contacts: [String]
-        requests: [String]
-        pendingRequests: [String]
+        requests: [Request]
+        pendingRequests: [Request]
+    }
+
+    type Request{
+        sourceId: String!
+        targetId: String!
+    }
+
+    input RequestInput{
+        sourceId: String!
+        targetId: String!
     }
 
     input UserInput {
@@ -26,6 +36,7 @@ module.exports = buildSchema(`
 
     type RootMutation {
         createUser(userInput: UserInput): User
+        addContact(RequestInput: RequestInput): User
     }
 
     schema {

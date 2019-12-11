@@ -51,13 +51,13 @@ module.exports = {
         }
     },
     retrieveUsers: async(pattern) => {
-        console.log("The pattern is: ", pattern);
+        // console.log("The pattern is: ", pattern);
         try{    
             const users = await User.find(
                 {"firstname": {$regex: pattern.pattern, "$options": "i"}},
             );
             if(users.length > 0){
-                console.log("The result of users is: ", users);
+                // console.log("The result of users is: ", users);
                 return users.map( user => {
                     return user
                 });
@@ -66,6 +66,36 @@ module.exports = {
             }
         }catch(error){
             throw error;
+        }
+    },
+    addContact: async(request) => {
+        console.log("Inside addContact");
+        // console.log("The request is: ", request.RequestInput.sourceId);
+        let sourceId = request.RequestInput.sourceId;
+        let targetId = request.RequestInput.targetId; 
+        try{
+            let sourceRequest = await User.updateOne(
+                { _id: sourceId }, 
+                { $push: { pendingRequests: {sourceId, targetId} } },
+            );
+            console.log("sourceRequest: ", sourceRequest);
+            if(sourceRequest){
+                let targetRequest = await User.updateOne(
+                    { _id: targetId }, 
+                    { $push: { requests: {sourceId, targetId} } },
+                );
+                if(targetRequest){
+                    const user = await User.findById(sourceId);
+                    if (user) return user;
+                    else throw new Error("Cant send conatct request");
+                }
+                else
+                    throw new Error("Cant send conatct request");
+            }else{
+                throw new Error("Cant send conatct request");
+            }
+        }catch(error){
+            throw new Error("Cant send conatct request");
         }
     }
 };
