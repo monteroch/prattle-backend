@@ -1,6 +1,8 @@
 const User  = require('../../models/user');
 const bcrypt = require('bcryptjs');
 var mongoose = require('mongoose');
+var ObjectId = require('mongodb').ObjectID;   
+
 
 module.exports = {
     createUser: async args => {
@@ -42,10 +44,10 @@ module.exports = {
     },
     loadProfile: async(userId) => {
         try{    
-            console.log("Inside loadProfile");
-            console.log("userID: ", userId)
-            const user = await User.findById(userId.userId);
-            console.log("The user is: ", user);
+            // console.log("Inside LOAD PROFILE");
+            // console.log("User Id: ", userId.userId);
+            let user = await User.findOne({_id: userId.userId}).populate('contacts');
+            // console.log("- The user is: ", user);
             return user;
         }catch(error){
             throw error;

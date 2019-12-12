@@ -2,13 +2,30 @@ const { buildSchema } = require('graphql');
 
 module.exports = buildSchema(`
     type User{
-        _id: ID!
+        _id: String!
         firstname: String!
         lastname: String!
         email: String!
         contacts: [String]
         requests: [Request]
         pendingRequests: [Request]
+    }
+
+    type UserExtended{
+        _id: String!
+        firstname: String!
+        lastname: String!
+        email: String!
+        contacts: [Contact]
+        requests: [Request]
+        pendingRequests: [Request]
+    }
+
+    type Contact{
+        _id: String!
+        firstname: String!
+        lastname: String!
+        email: String!
     }
 
     type Request{
@@ -42,7 +59,7 @@ module.exports = buildSchema(`
 
     type RootQuery {
         users: [User!]!
-        loadProfile(userId: String): User
+        loadProfile(userId: String): UserExtended
         retrieveUsers(pattern: String!): [User!]!
     }
 

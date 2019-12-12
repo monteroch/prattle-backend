@@ -17,7 +17,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    contacts:[String],
+    contacts:[{
+        type: Schema.Types.String,
+        ref: 'User'
+    }],
     requests:[{
         requestId: String,
         sourceId: String,
@@ -34,4 +37,6 @@ const userSchema = new Schema({
     }],
 });
 
-module.exports = mongoose.model('User', userSchema);
+
+const User = mongoose.model('User', userSchema);
+module.exports =  User;
