@@ -2,6 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
 const mongoose = require('mongoose');
+const http = require('http');
+const socketIO = require('socket.io');
+
 
 const graphQlSchema = require('./graphql/schema/index');
 const graphQlresolvers = require('./graphql/resolvers/index');
@@ -29,8 +32,13 @@ app.use('/graphql', graphqlHttp({
 
 mongoose.connect('mongodb://localhost:4444/prattle-backend')
 .then( () => {
-    app.listen(4001, () => {
+    var server = app.listen(4001, () => {
         console.log('Prattle running on port 4001');
+    })
+    
+    var io = socketIO.listen(server);
+    io.on('connect', function(){
+        console.log("New client connected");
     })
 })
 .catch( error => {
@@ -40,4 +48,4 @@ mongoose.connect('mongodb://localhost:4444/prattle-backend')
 
 app.get('/', (req, res) => {
     res.send('Que pedo prrillo, esta es la app buena');
-})
+});
