@@ -37,9 +37,15 @@ mongoose.connect('mongodb://localhost:4444/prattle-backend')
     })
     
     var io = socketIO.listen(server);
-    io.on('connect', function(){
-        console.log("New client connected");
-    })
+    io.on('connect', (socket) => {
+
+        console.log("New user connected");
+
+        socket.on('newMessage', (message) => {
+            console.log("The message is: ", message);
+        });
+
+    });
 })
 .catch( error => {
     throw new Error('Cannot connect to DB');
