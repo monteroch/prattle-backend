@@ -54,7 +54,6 @@ module.exports = {
         }
     },
     retrieveUsers: async(pattern) => {
-        // console.log("The pattern is: ", pattern);
         try{    
             const users = await User.find(
                 {"firstname": {$regex: pattern.pattern, "$options": "i"}},
