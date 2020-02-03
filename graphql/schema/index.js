@@ -3,8 +3,7 @@ const { buildSchema } = require('graphql');
 module.exports = buildSchema(`
     type User{
         _id: String!
-        firstname: String!
-        lastname: String!
+        fullname: String!
         email: String!
         contacts: [String]
         requests: [Request]
@@ -13,8 +12,7 @@ module.exports = buildSchema(`
 
     type UserExtended{
         _id: String!
-        firstname: String!
-        lastname: String!
+        fullname: String!
         email: String!
         contacts: [Contact]
         requests: [Request]
@@ -23,8 +21,7 @@ module.exports = buildSchema(`
 
     type Contact{
         _id: String!
-        firstname: String!
-        lastname: String!
+        fullname: String!
         email: String!
     }
 
@@ -45,8 +42,7 @@ module.exports = buildSchema(`
 
     input UserInput {
         _id: String!
-        firstname: String!
-        lastname: String!
+        fullname: String!
         email: String!
     }
 

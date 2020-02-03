@@ -15,8 +15,7 @@ module.exports = {
             //Creating the user
             const user = new User({
                 _id: args.userInput._id,
-                firstname: args.userInput.firstname,
-                lastname: args.userInput.lastname, 
+                fullname: args.userInput.fullname,
                 email: args.userInput.email,
                 contacts: [],
                 requests:[],
@@ -56,7 +55,7 @@ module.exports = {
     retrieveUsers: async(pattern) => {
         try{    
             const users = await User.find(
-                {"firstname": {$regex: pattern.pattern, "$options": "i"}},
+                {"fullname": {$regex: pattern.pattern, "$options": "i"}},
             );
             if(users.length > 0){
                 // console.log("The result of users is: ", users);
