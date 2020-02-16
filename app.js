@@ -30,19 +30,31 @@ app.use('/graphql', graphqlHttp({
     graphiql: true
 }));
 
-mongoose.connect('mongodb://localhost:4444/prattle-backend')
+mongoose.connect('mongodb://localhost:4444/prattle-backend', { useNewUrlParser: true, useUnifiedTopology: true })
 .then( () => {
     var server = app.listen(4001, () => {
-        console.log('Prattle running on port 4001');
+        console.log('[Prattle-Backend] running on port 4001');
     })
     
     var io = socketIO.listen(server);
     io.on('connect', (socket) => {
+        socket.on('NEW_MESSAGE', (message) => {
+            console.log(`[${message.author}] ${message.date}: ${message.text}`);
+            socket.emit("MESSAGE_FROM_SERVER", {message});
+        });
 
-        console.log("New user connected");
+        socket.on('LOGGED_IN', (data) => {
+            var {user : {conversations} }  = data;
+            console.log(`[${data.user.fullname}] has logged in`);
+            for(var cnt = 0; cnt < conversations.length; cnt++){
+                console.log("["+conversations[cnt]._id+"] room joinned");
+                socket.join(conversations[cnt]._id);
+            }
+        });
 
-        socket.on('newMessage', (message) => {
-            console.log("The message is: ", message);
+        socket.on('JOIN_ROOM_REQUEST', (conversationId) => {
+            console.log("The room is: ", conversationId);
+            socket.join(conversationId);
         });
 
     });
@@ -53,5 +65,5 @@ mongoose.connect('mongodb://localhost:4444/prattle-backend')
 
 
 app.get('/', (req, res) => {
-    res.send('Que pedo prrillo, esta es la app buena');
+    res.send('[Prattle-Backend] running on port 4001');
 });

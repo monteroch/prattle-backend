@@ -8,6 +8,14 @@ module.exports = buildSchema(`
         contacts: [String]
         requests: [Request]
         pendingRequests: [Request]
+        conversations: [String]
+    }
+
+    type Conversation{
+        _id: String!
+        participants: [String]
+        createdAt: String
+        lastMessageAt: String
     }
 
     type UserExtended{
@@ -17,6 +25,7 @@ module.exports = buildSchema(`
         contacts: [Contact]
         requests: [Request]
         pendingRequests: [Request]
+        conversations: [Conversation]
     }
 
     type Contact{

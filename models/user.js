@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const Conversation  = require('./conversation');
+
 const Schema = mongoose.Schema;
 const userSchema = new Schema({
     _id:{
@@ -31,6 +33,10 @@ const userSchema = new Schema({
         targetId: String,
         targetName: String
     }],
+    conversations:[{
+        type: Schema.Types.String,
+        ref: 'Conversation'
+    }]
 });
 
 

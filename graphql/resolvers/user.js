@@ -1,4 +1,5 @@
 const User  = require('../../models/user');
+const Conversation = require('../../models/conversation');
 const bcrypt = require('bcryptjs');
 var mongoose = require('mongoose');
 var ObjectId = require('mongodb').ObjectID;   
@@ -45,7 +46,7 @@ module.exports = {
         try{    
             // console.log("Inside LOAD PROFILE");
             // console.log("User Id: ", userId.userId);
-            let user = await User.findOne({_id: userId.userId}).populate('contacts');
+            let user = await User.findOne({_id: userId.userId}).populate('contacts').populate('conversations');
             // console.log("- The user is: ", user);
             return user;
         }catch(error){
@@ -103,47 +104,56 @@ module.exports = {
         }
     },
     handleFriendshipRequest: async(request) => {
-        console.log("Inside handleFriendshipRequest");
-        // console.log("The request is: ", request.RequestInput);
-        console.log("The request is: ", request);
         let value = request.HandleRequest.value;
         let requestId = request.HandleRequest.requestId;
         let sourceId = request.HandleRequest.sourceId;
         let targetId = request.HandleRequest.targetId;
-        console.log("Value: ", value);
-        console.log("RequestID: ", requestId);
-        console.log("SourceID: ", sourceId);
-        console.log("TargetID: ", targetId);
         try{
              //Remove request from 2 users
              let removeReqFromSource = await User.updateOne(
                 { _id: sourceId }, 
                 { $pull: { pendingRequests: {requestId: requestId} } },
             );
-            console.log("removeReqFromSource: ", removeReqFromSource);
             let removeReqFromTarget = await User.updateOne(
                 { _id: targetId }, 
                 { $pull: { requests: {requestId: requestId} } },
             );
-            console.log("removeReqFromTarget: ", removeReqFromTarget);
             if(value){
+                //Create new conversation Id
+                let conversationId = ObjectId().toString();
                 //Add contact to 2 users
                 let addToSource = await User.updateOne(
                     { _id: sourceId }, 
                     { $push: { contacts: targetId } },
                 );
-                console.log("addToSource: ", addToSource);
+                let addConversationToSource = await User.updateOne(
+                    { _id: sourceId }, 
+                    { $push: { conversations: conversationId } },
+                )
                 let addToTarget = await User.updateOne(
                     { _id: targetId }, 
                     { $push: { contacts: sourceId } },
                 );
-                console.log("addToTarget: ", addToTarget);
+                let addConversationToTarget = await User.updateOne(
+                    { _id: targetId }, 
+                    { $push: { conversations: conversationId } },
+                )
+                //Creating the conversation Object
+                const conversation = new Conversation({
+                    _id: conversationId,
+                    participants: [sourceId, targetId],
+                    createdAt: new Date(Date.now()).toLocaleString(),
+                    lastMessageAt: new Date(Date.now()).toLocaleString()
+                });
+                var conversationResult = await conversation.save(function(err){
+                    if(err) console.log(err);
+                });
             }
             const user = await User.findById(targetId);
             if (user) return user;
             else throw new Error("Error handling the friendship request");
         }catch(error){
-            throw new Error("Error handling the friendship request.")
+            return error;
         }
     }
 };
