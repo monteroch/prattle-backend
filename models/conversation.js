@@ -6,9 +6,23 @@ const conversationSchema = new Schema({
         type: String,
         required: true
     },
+    name: {
+        type: String,
+        required: false
+    },
     participants:[{
-        type: Schema.Types.String,
-        ref: 'User'
+        _id: {
+            type: String,
+            required: true
+        },
+        name: {
+            type: String,
+            required: false
+        },
+        addedAt: {
+            type: String,
+            required: false
+        }
     }],
     createdAt:{
         type: String

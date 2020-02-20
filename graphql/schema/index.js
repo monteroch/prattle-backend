@@ -13,7 +13,8 @@ module.exports = buildSchema(`
 
     type Conversation{
         _id: String!
-        participants: [String]
+        name: String
+        participants: [Participant]
         createdAt: String
         lastMessageAt: String
     }
@@ -42,6 +43,12 @@ module.exports = buildSchema(`
         targetName: String!
     }
 
+    type Participant{
+        _id: String!
+        name: String
+        addedAt: String
+    }
+
     input RequestInput{
         sourceId: String!
         sourceName: String!
@@ -59,7 +66,9 @@ module.exports = buildSchema(`
         value: Boolean!
         requestId: String!
         sourceId: String!
+        sourceName: String!
         targetId: String!
+        targetName: String!
     }
 
     type RootQuery {

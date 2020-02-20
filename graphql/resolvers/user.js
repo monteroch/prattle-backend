@@ -107,7 +107,9 @@ module.exports = {
         let value = request.HandleRequest.value;
         let requestId = request.HandleRequest.requestId;
         let sourceId = request.HandleRequest.sourceId;
+        let sourceName = request.HandleRequest.sourceName;
         let targetId = request.HandleRequest.targetId;
+        let targetName = request.HandleRequest.targetName;
         try{
              //Remove request from 2 users
              let removeReqFromSource = await User.updateOne(
@@ -141,7 +143,16 @@ module.exports = {
                 //Creating the conversation Object
                 const conversation = new Conversation({
                     _id: conversationId,
-                    participants: [sourceId, targetId],
+                    name: "noname",
+                    participants: [{
+                        _id: sourceId,
+                        name: sourceName,
+                        addedAt: new Date(Date.now()).toLocaleString()
+                    }, {
+                        _id: targetId,
+                        name: targetName,
+                        addedAt: new Date(Date.now()).toLocaleString()
+                    }],
                     createdAt: new Date(Date.now()).toLocaleString(),
                     lastMessageAt: new Date(Date.now()).toLocaleString()
                 });
