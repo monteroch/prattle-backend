@@ -62,6 +62,12 @@ module.exports = buildSchema(`
         email: String!
     }
 
+    input ContactInput{
+        _id: String!
+        name: String
+        addedAt: String
+    }
+
     input HandleRequest{
         value: Boolean!
         requestId: String!
@@ -69,6 +75,21 @@ module.exports = buildSchema(`
         sourceName: String!
         targetId: String!
         targetName: String!
+    }
+
+    input GroupRequestInput{
+        participants: [ContactInput]
+    }
+
+    input UsernameInput{
+        _id: String!
+        name: String
+        addedAt: String
+    }
+
+    type UsernameOutput{
+        name: String
+        age: String
     }
 
     type RootQuery {
@@ -81,6 +102,7 @@ module.exports = buildSchema(`
         createUser(userInput: UserInput): User
         addContact(RequestInput: RequestInput): User
         handleFriendshipRequest(HandleRequest: HandleRequest): User
+        createGroup(UsernameInput: [UsernameInput], GroupName: String): Conversation
     }
 
     schema {

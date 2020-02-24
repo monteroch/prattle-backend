@@ -166,5 +166,49 @@ module.exports = {
         }catch(error){
             return error;
         }
+    },
+    createGroup: async(data) => {
+        try{
+            participants = data.UsernameInput.map( user => {
+                return {
+                    _id: user._id,
+                    name: user.name,
+                    addedAt: user.addedAt
+                }
+            });
+            console.log("The new Array is: ");
+            console.log(participants);
+            // data.UsernameInput.map(user => {
+            //     console.log("Name: ", user.name);
+            //     console.log("Age: ", user.age);
+            // })
+            //Create conversationId
+            let conversationId = ObjectId().toString();
+            //Add conversation tu users
+            participants.forEach( async participant => {
+                await User.updateOne(
+                    { _id: participant._id }, 
+                    { $push: { conversations: conversationId } },
+                )
+            });
+            //Creating the conversation Object
+            const conversation = new Conversation({
+                _id: conversationId,
+                name: data.GroupName,
+                participants: [...participants],
+                createdAt: new Date(Date.now()).toLocaleString(),
+                lastMessageAt: new Date(Date.now()).toLocaleString()
+            });
+            var conversationResult = await conversation.save(function(err){
+                if(err) console.log(err);
+            });
+            // let savedConversation = await Conversation.findById(conversationId);
+            let savedConversation = await Conversation.findOne({_id: conversationId});
+            if (savedConversation) return savedConversation;
+            else throw new Error("Error handling the friendship request");
+            // return {name: "Christian", age: 28
+        }catch(error){
+            return error;
+        }
     }
 };
