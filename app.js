@@ -52,11 +52,14 @@ mongoose.connect('mongodb://localhost:4444/prattle-backend', { useNewUrlParser: 
 
         socket.on('LOGGED_IN', (data) => {
             var {user : {conversations} }  = data;
+            // console.log("The user is: ", data.user);
             console.log(`[${data.user.fullname}] has logged in`);
             for(var cnt = 0; cnt < conversations.length; cnt++){
                 console.log("["+conversations[cnt]._id+"] room joinned");
                 socket.join(conversations[cnt]._id);
             }
+            //Also create a room with the user _id
+            console.log("["+data.user._id+"] room joinned");
         });
 
         socket.on('JOIN_ROOM_REQUEST', (conversationId) => {
