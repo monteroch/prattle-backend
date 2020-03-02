@@ -96,6 +96,7 @@ module.exports = buildSchema(`
         users: [User!]!
         loadProfile(userId: String): UserExtended
         retrieveUsers(pattern: String!): [User!]!
+        getConversations(userId: String):[Conversation]
     }
 
     type RootMutation {

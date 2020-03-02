@@ -210,5 +210,15 @@ module.exports = {
         }catch(error){
             return error;
         }
+    },
+    getConversations: async(data) => {
+        // console.log("The data is: ", data);
+        try{
+            let user = await User.findOne({_id: data.userId}).populate('contacts').populate('conversations');
+            // console.log("- The user is: ", user);
+            return user.conversations;
+        }catch(error){
+            throw error;
+        }
     }
 };
