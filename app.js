@@ -30,7 +30,7 @@ app.use('/graphql', graphqlHttp({
     graphiql: true
 }));
 
-mongoose.connect('mongodb://localhost:4444/prattle-backend', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://prattle-chatdb:5001/prattle-backend', { useNewUrlParser: true, useUnifiedTopology: true })
 .then( () => {
     var server = app.listen(4001, () => {
         console.log('[Prattle-Backend] running on port 4001');
