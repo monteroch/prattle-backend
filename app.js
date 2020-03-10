@@ -27,6 +27,7 @@ mongoose.connect('mongodb://localhost:4444/prattle-backend', { useNewUrlParser: 
     
     var io = socketIO.listen(server);
     io.on('connect', (socket) => {
+        console.log("Connected");
         socket.on('NEW_MESSAGE', (message) => {
             console.log(`[${message.conversationId}]-[${message.author}] ${message.date}: ${message.text}`);
             io.to(message.conversationId).emit('MESSAGE_FROM_SERVER', {
