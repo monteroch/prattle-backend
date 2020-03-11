@@ -168,6 +168,7 @@ module.exports = {
         }
     },
     createGroup: async(data) => {
+        console.log("data inside CREATE GROUP: ", data);
         try{
             participants = data.UsernameInput.map( user => {
                 return {
@@ -199,14 +200,10 @@ module.exports = {
                 createdAt: new Date(Date.now()).toLocaleString(),
                 lastMessageAt: new Date(Date.now()).toLocaleString()
             });
-            var conversationResult = await conversation.save(function(err){
+            var conversationResult = await conversation.save(function(err, conversation){
                 if(err) console.log(err);
+                return conversation.name;
             });
-            // let savedConversation = await Conversation.findById(conversationId);
-            let savedConversation = await Conversation.findOne({_id: conversationId});
-            if (savedConversation) return savedConversation;
-            else throw new Error("Error handling the friendship request");
-            // return {name: "Christian", age: 28
         }catch(error){
             return error;
         }

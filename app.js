@@ -13,17 +13,6 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    if(req.method === 'OPTIONS'){
-        return res.sendStatus(200);
-    }
-    next();
-});
-
 app.use('/graphql', graphqlHttp({
     schema: graphQlSchema,
     rootValue: graphQlresolvers,
@@ -38,6 +27,7 @@ mongoose.connect('mongodb://prattle-chatdb:5001/prattle-backend', { useNewUrlPar
     
     var io = socketIO.listen(server);
     io.on('connect', (socket) => {
+        console.log("Connected");
         socket.on('NEW_MESSAGE', (message) => {
             console.log(`[${message.conversationId}]-[${message.author}] ${message.date}: ${message.text}`);
             io.to(message.conversationId).emit('MESSAGE_FROM_SERVER', {
