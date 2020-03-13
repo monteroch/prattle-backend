@@ -25,6 +25,7 @@ mongoose.connect('mongodb://localhost:4444/prattle-backend', { useNewUrlParser: 
         console.log('[Prattle-Backend] running on port 4001');
     })
     
+    //change from date to createdAt
     var io = socketIO.listen(server);
     io.on('connect', (socket) => {
         socket.on('NEW_MESSAGE', (message) => {
@@ -33,7 +34,7 @@ mongoose.connect('mongodb://localhost:4444/prattle-backend', { useNewUrlParser: 
                 _id: message._id,
                 conversationId: message.conversationId,
                 author: message.author,
-                createdAt: message.date,
+                createdAt: message.date, 
                 text: message.text
             });
             // socket.emit("MESSAGE_FROM_SERVER", {message});
