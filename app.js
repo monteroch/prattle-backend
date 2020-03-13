@@ -44,7 +44,7 @@ mongoose.connect('mongodb://localhost:4444/prattle-backend', { useNewUrlParser: 
                 _id: message._id,
                 conversationId: message.conversationId,
                 author: message.author,
-                date: message.date,
+                createdAt: message.date,
                 text: message.text
             });
             // socket.emit("MESSAGE_FROM_SERVER", {message});
