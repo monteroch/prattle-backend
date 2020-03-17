@@ -44,10 +44,7 @@ module.exports = {
     },
     loadProfile: async(userId) => {
         try{    
-            // console.log("Inside LOAD PROFILE");
-            // console.log("User Id: ", userId.userId);
             let user = await User.findOne({_id: userId.userId}).populate('contacts').populate('conversations');
-            // console.log("- The user is: ", user);
             return user;
         }catch(error){
             throw error;
@@ -160,7 +157,7 @@ module.exports = {
                     if(err) console.log(err);
                 });
             }
-            const user = await User.findById(targetId);
+            const user = await User.findOne({_id: targetId}).populate('contacts').populate('conversations');
             if (user) return user;
             else throw new Error("Error handling the friendship request");
         }catch(error){
@@ -176,12 +173,6 @@ module.exports = {
                     addedAt: user.addedAt
                 }
             });
-            console.log("The new Array is: ");
-            console.log(participants);
-            // data.UsernameInput.map(user => {
-            //     console.log("Name: ", user.name);
-            //     console.log("Age: ", user.age);
-            // })
             //Create conversationId
             let conversationId = ObjectId().toString();
             //Add conversation tu users
@@ -199,14 +190,12 @@ module.exports = {
                 createdAt: new Date(Date.now()).toLocaleString(),
                 lastMessageAt: new Date(Date.now()).toLocaleString()
             });
-            var conversationResult = await conversation.save(function(err){
-                if(err) console.log(err);
-            });
-            // let savedConversation = await Conversation.findById(conversationId);
-            let savedConversation = await Conversation.findOne({_id: conversationId});
-            if (savedConversation) return savedConversation;
-            else throw new Error("Error handling the friendship request");
-            // return {name: "Christian", age: 28
+            return conversation.save()
+            .then( conversation => {
+                console.log("THE CONVERSATION IS: ", conversation)
+                return conversation;
+            })
+            .catch(error => {return error})
         }catch(error){
             return error;
         }
