@@ -102,7 +102,7 @@ module.exports = buildSchema(`
     type RootMutation {
         createUser(userInput: UserInput): User
         addContact(RequestInput: RequestInput): User
-        handleFriendshipRequest(HandleRequest: HandleRequest): UserExtended
+        handleFriendshipRequest(HandleRequest: HandleRequest): Conversation
         createGroup(UsernameInput: [UsernameInput], GroupName: String): Conversation
     }
 

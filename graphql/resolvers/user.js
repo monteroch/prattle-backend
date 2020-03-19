@@ -153,13 +153,19 @@ module.exports = {
                     createdAt: new Date(Date.now()).toLocaleString(),
                     lastMessageAt: new Date(Date.now()).toLocaleString()
                 });
-                var conversationResult = await conversation.save(function(err){
-                    if(err) console.log(err);
-                });
+                return conversation.save()
+                .then( conversation => {
+                    console.log("THE CONVERSATION IS: ", conversation)
+                    return conversation;
+                })
+                .catch(error => {return error})
+                // var conversationResult = await conversation.save(function(err){
+                //     if(err) console.log(err);
+                // });
             }
-            const user = await User.findOne({_id: targetId}).populate('contacts').populate('conversations');
-            if (user) return user;
-            else throw new Error("Error handling the friendship request");
+            // const user = await User.findOne({_id: targetId}).populate('contacts').populate('conversations');
+            // if (user) return user;
+            // else throw new Error("Error handling the friendship request");
         }catch(error){
             return error;
         }
@@ -192,7 +198,7 @@ module.exports = {
             });
             return conversation.save()
             .then( conversation => {
-                console.log("THE CONVERSATION IS: ", conversation)
+                // console.log("THE CONVERSATION IS: ", conversation)
                 return conversation;
             })
             .catch(error => {return error})
