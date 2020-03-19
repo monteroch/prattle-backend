@@ -56,7 +56,6 @@ module.exports = {
                 {"fullname": {$regex: pattern.pattern, "$options": "i"}},
             );
             if(users.length > 0){
-                // console.log("The result of users is: ", users);
                 return users.map( user => {
                     return user
                 });
@@ -68,8 +67,6 @@ module.exports = {
         }
     },
     addContact: async(request) => {
-        console.log("Inside addContact");
-        console.log("The request is: ", request.RequestInput);
         let requestId = mongoose.Types.ObjectId().valueOf();
         let sourceId = request.RequestInput.sourceId;
         let sourceName = request.RequestInput.sourceName;
@@ -80,7 +77,6 @@ module.exports = {
                 { _id: sourceId }, 
                 { $push: { pendingRequests: {requestId, sourceId, sourceName, targetId, targetName} } },
             );
-            console.log("sourceRequest: ", sourceRequest);
             if(sourceRequest){
                 let targetRequest = await User.updateOne(
                     { _id: targetId }, 
@@ -155,17 +151,10 @@ module.exports = {
                 });
                 return conversation.save()
                 .then( conversation => {
-                    console.log("THE CONVERSATION IS: ", conversation)
                     return conversation;
                 })
                 .catch(error => {return error})
-                // var conversationResult = await conversation.save(function(err){
-                //     if(err) console.log(err);
-                // });
             }
-            // const user = await User.findOne({_id: targetId}).populate('contacts').populate('conversations');
-            // if (user) return user;
-            // else throw new Error("Error handling the friendship request");
         }catch(error){
             return error;
         }
@@ -198,7 +187,6 @@ module.exports = {
             });
             return conversation.save()
             .then( conversation => {
-                // console.log("THE CONVERSATION IS: ", conversation)
                 return conversation;
             })
             .catch(error => {return error})
@@ -207,10 +195,8 @@ module.exports = {
         }
     },
     getConversations: async(data) => {
-        // console.log("The data is: ", data);
         try{
             let user = await User.findOne({_id: data.userId}).populate('contacts').populate('conversations');
-            // console.log("- The user is: ", user);
             return user.conversations;
         }catch(error){
             throw error;
