@@ -44,10 +44,7 @@ module.exports = {
     },
     loadProfile: async(userId) => {
         try{    
-            // console.log("Inside LOAD PROFILE");
-            // console.log("User Id: ", userId.userId);
             let user = await User.findOne({_id: userId.userId}).populate('contacts').populate('conversations');
-            // console.log("- The user is: ", user);
             return user;
         }catch(error){
             throw error;
@@ -59,7 +56,6 @@ module.exports = {
                 {"fullname": {$regex: pattern.pattern, "$options": "i"}},
             );
             if(users.length > 0){
-                // console.log("The result of users is: ", users);
                 return users.map( user => {
                     return user
                 });
@@ -71,8 +67,6 @@ module.exports = {
         }
     },
     addContact: async(request) => {
-        console.log("Inside addContact");
-        console.log("The request is: ", request.RequestInput);
         let requestId = mongoose.Types.ObjectId().valueOf();
         let sourceId = request.RequestInput.sourceId;
         let sourceName = request.RequestInput.sourceName;
@@ -83,7 +77,6 @@ module.exports = {
                 { _id: sourceId }, 
                 { $push: { pendingRequests: {requestId, sourceId, sourceName, targetId, targetName} } },
             );
-            console.log("sourceRequest: ", sourceRequest);
             if(sourceRequest){
                 let targetRequest = await User.updateOne(
                     { _id: targetId }, 
@@ -156,13 +149,12 @@ module.exports = {
                     createdAt: new Date(Date.now()).toLocaleString(),
                     lastMessageAt: new Date(Date.now()).toLocaleString()
                 });
-                var conversationResult = await conversation.save(function(err){
-                    if(err) console.log(err);
-                });
+                return conversation.save()
+                .then( conversation => {
+                    return conversation;
+                })
+                .catch(error => {return error})
             }
-            const user = await User.findById(targetId);
-            if (user) return user;
-            else throw new Error("Error handling the friendship request");
         }catch(error){
             return error;
         }
@@ -177,12 +169,6 @@ module.exports = {
                     addedAt: user.addedAt
                 }
             });
-            console.log("The new Array is: ");
-            console.log(participants);
-            // data.UsernameInput.map(user => {
-            //     console.log("Name: ", user.name);
-            //     console.log("Age: ", user.age);
-            // })
             //Create conversationId
             let conversationId = ObjectId().toString();
             //Add conversation tu users
@@ -200,19 +186,18 @@ module.exports = {
                 createdAt: new Date(Date.now()).toLocaleString(),
                 lastMessageAt: new Date(Date.now()).toLocaleString()
             });
-            var conversationResult = await conversation.save(function(err, conversation){
-                if(err) console.log(err);
-                return conversation.name;
-            });
+            return conversation.save()
+            .then( conversation => {
+                return conversation;
+            })
+            .catch(error => {return error})
         }catch(error){
             return error;
         }
     },
     getConversations: async(data) => {
-        // console.log("The data is: ", data);
         try{
             let user = await User.findOne({_id: data.userId}).populate('contacts').populate('conversations');
-            // console.log("- The user is: ", user);
             return user.conversations;
         }catch(error){
             throw error;
